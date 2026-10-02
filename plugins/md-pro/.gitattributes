@@ -1,0 +1,5 @@
+# sh-скрипт — только с LF на любой системе: с CRLF на macOS и Linux он не запустится («/bin/sh^M»).
+native/mdpro text eol=lf
+# собранные программы
+native/mdpro-* binary
+native/mdpro.exe binary

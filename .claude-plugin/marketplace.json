@@ -1,0 +1,12 @@
+{
+  "name": "md-pro",
+  "owner": { "name": "defujo" },
+  "description": "md-pro — правила проекта для Claude Code по подписке",
+  "plugins": [
+    {
+      "name": "md-pro",
+      "source": "./plugins/md-pro",
+      "description": "Загружает правила проекта (мдшку) под вашу модель Claude в начале каждой сессии. Нужен ключ доступа."
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+#!/bin/sh
+# Выбирает программу md-pro под систему и процессор (macOS, Linux; Git Bash на Windows — для ручного запуска).
+# Хуки на Windows этот файл не запускают: Claude Code сам берёт mdpro.exe рядом.
+# Что бы ни случилось — код 0 и пустой stderr: покупатель не должен видеть «hook error» (спец. 4.7).
+dir=$(dirname "$0")
+call="$1 $2"
+
+# say: строку покупателю показывает только слот 1 (JSON хука начала сессии), остальные молчат.
+say() {
+  if [ "$call" = "slot 1" ]; then
+    printf '{"systemMessage":"%s"}\n' "$1"
+  fi
+  exit 0
+}
+
+system=$(uname -s 2>/dev/null)
+machine=$(uname -m 2>/dev/null)
+case "$system-$machine" in
+  Darwin-arm64) exe=mdpro-darwin-arm64 ;;
+  Darwin-x86_64) exe=mdpro-darwin-amd64 ;;
+  Linux-x86_64|Linux-amd64) exe=mdpro-linux-amd64 ;;
+  Linux-aarch64|Linux-arm64) exe=mdpro-linux-arm64 ;;
+  MINGW*|MSYS*|CYGWIN*) exe=mdpro.exe ;;
+  *) say "⚠ md-pro: эта система не поддерживается ($(echo "$system $machine" | tr -cd 'A-Za-z0-9._ -'))" ;;
+esac
+
+# Право на запуск теряется при распаковке или в git без +x — возвращаем.
+[ -x "$dir/$exe" ] || chmod +x "$dir/$exe" 2>/dev/null
+[ -x "$dir/$exe" ] || say "⚠ md-pro: не удалось запустить программу плагина ($exe) — переустановите плагин"
+exec "$dir/$exe" "$@"

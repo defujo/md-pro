@@ -1,0 +1,5 @@
+# sh-скрипт запуска должен всегда иметь окончания строк LF, иначе на macOS/Linux он не запустится
+plugins/md-pro/native/mdpro text eol=lf
+# собранные программы — двоичные файлы
+plugins/md-pro/native/mdpro.exe binary
+plugins/md-pro/native/mdpro-* binary
